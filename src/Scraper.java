@@ -130,48 +130,4 @@ public class Scraper {
                 .replace("\u00c4", "AE");
         return newString;
     }
-
-    public static int[] getPSIscores(String link) {
-        if (link.length() == 0)
-            return new int[]{-1, -1};
-        int[] scores = new int[2];
-        Random r = new Random();
-            /*Connection connection = Jsoup.connect("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=AIzaSyCHDFi2I864kUaYOv0njrZJXqlo3a-TBLM&url=" + link + "%2F&fields=lighthouseResult%2Fcategories%2F*%2Fscore&strategy=desktop&category=performance");
-            connection.timeout(20 * 1000);
-            String test = connection.ignoreContentType(true).execute().body();
-            System.out.println(test);*/
-        try {
-            String test = fcr.getContentFromUrl("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=AIzaSyCHDFi2I864kUaYOv0njrZJXqlo3a-TBLM&url=" + link + "%2F&fields=lighthouseResult%2Fcategories%2F*%2Fscore&strategy=desktop&category=performance");
-
-            scores[0] = (int) (Double.parseDouble(test.split("\"performance\": \\{\n        \"score\": ")[1].split("}")[0].trim()) * 100);
-
-            // sleep for 0.5s to watch out for api limits
-            try {
-                Thread.sleep((long) (300));
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-
-            test = fcr.getContentFromUrl("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=AIzaSyCHDFi2I864kUaYOv0njrZJXqlo3a-TBLM&url=" + link + "%2F&fields=lighthouseResult%2Fcategories%2F*%2Fscore&strategy=desktop&category=performance");
-
-            //System.out.println(test);
-            scores[1] = (int) (Double.parseDouble(test.split("\"performance\": \\{\n        \"score\": ")[1].split("}")[0].trim()) * 100);
-            //System.out.println(test);
-            // sleep for 0.5s to watch out for api limits
-            try {
-                Thread.sleep((long) (300));
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-            System.out.println("Ergebnis: " + scores[0] + "/" + scores[1]);
-        } catch (Exception e) {
-            System.out.println("Exception cought!");
-            e.printStackTrace();
-            return new int[]{-2, -2};
-        }
-        //System.out.println(test);
-
-
-        return scores;
-    }
 }
